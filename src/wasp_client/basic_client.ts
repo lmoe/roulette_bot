@@ -24,6 +24,7 @@ export interface BasicClientConfiguration {
   GoShimmerAPIUrl: string;
   Seed: Buffer;
   ChainId: string;
+  ProofOfWorkDifficulty: number;
 }
 
 export interface CallViewResponse extends IResponse {

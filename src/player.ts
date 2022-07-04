@@ -21,14 +21,17 @@ export default class Player {
   private address: string;
   private keyPair: IKeyPair;
   private funds: BigInt;
+  private proofOfWorkDifficulty: number;
 
   constructor(
     id: number,
+    proofOfWorkDifficulty: number
     basicClient: BasicClient,
     walletService: WalletService,
     fairRouletteService: FairRouletteService
   ) {
     this.id = id;
+    this.proofOfWorkDifficulty = proofOfWorkDifficulty;
     this.seed = Seed.generate();
     this.walletService = walletService;
     this.client = basicClient;
@@ -53,12 +56,12 @@ export default class Player {
     );
 
     faucetRequestResult.faucetRequest.nonce = ProofOfWork.calculateProofOfWork(
-      12,
+      this.proofOfWorkDifficulty,
       faucetRequestResult.poWBuffer
     );
 
     try {
-      await this.client.sendFaucetRequest(faucetRequestResult.faucetRequest);
+      const response = await this.client.sendFaucetRequest(faucetRequestResult.faucetRequest);
       await this.sleep(1000);
       await this.pollFunds();
     } catch (ex) {

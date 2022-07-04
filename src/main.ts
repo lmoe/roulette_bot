@@ -48,7 +48,7 @@ async function placeBetsInParallel(player: Player) {
 
 async function main() {
   for (let i = 0; i < config.BotConfiguration.WorkerAmount; i++) {
-    const player = new Player(i, client, walletService, fairRouletteService);
+    const player = new Player(i, config.ClientConfiguration.ProofOfWorkDifficulty, client, walletService, fairRouletteService);
     players.push(player);
   }
 
