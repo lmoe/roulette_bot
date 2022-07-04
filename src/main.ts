@@ -52,6 +52,7 @@ async function main() {
     players.push(player);
   }
 
+  console.log("Initializing players");
   await Promise.all(players.map((x) => x.initialize()));
 
   console.log(`Generated ${players.length} actors`);

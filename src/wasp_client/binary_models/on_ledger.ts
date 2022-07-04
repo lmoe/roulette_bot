@@ -48,8 +48,8 @@ export class OnLedger {
         buffer.writeUInt16LE(keyBuffer.length);
         buffer.writeBytes(keyBuffer);
 
-        const valueBuffer = Buffer.alloc(8);
-        valueBuffer.writeInt32LE(arg.value, 0);
+        const valueBuffer = Buffer.alloc(2);
+        valueBuffer.writeInt16LE(arg.value, 0);
 
         buffer.writeUInt32LE(valueBuffer.length);
         buffer.writeBytes(valueBuffer);

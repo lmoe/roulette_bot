@@ -39,7 +39,9 @@ export default class Player {
   }
 
   public async initialize() {
+    console.log(`Player ${this.id}: generate new address`)
     this.newAddress();
+    console.log(`Player ${this.id}: send faucet request`)
     await this.sendFaucetRequest();
   }
 
