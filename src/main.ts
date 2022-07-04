@@ -30,6 +30,13 @@ async function placeBetsInSeries() {
 }
 
 async function placeBetsInParallel(player: Player) {
+  const min = config.BotConfiguration.MinWaitSeconds * 1000;
+  const max = config.BotConfiguration.MaxWaitSeconds * 1000;
+
+  const waitTime = Math.floor(Math.random() * (max - min) + min);
+  console.log(`\nWaiting ${waitTime / 1000}s for the next bet\n`);
+  await player.sleep(waitTime)
+
   console.log('[Parallel] Placing random bet with player ' + player.id);
 
   try {
@@ -38,12 +45,7 @@ async function placeBetsInParallel(player: Player) {
     console.log("Place bet failed, retrying in the next round again.");
   }
 
-  const min = config.BotConfiguration.MinWaitSeconds * 1000;
-  const max = config.BotConfiguration.MaxWaitSeconds * 1000;
-
-  const waitTime = Math.floor(Math.random() * (max - min) + min);
-  console.log(`\nWaiting ${waitTime / 1000}s for the next bet\n`);
-  setTimeout(() => placeBetsInParallel(player), waitTime);
+  placeBetsInParallel(player);
 }
 
 async function main() {
