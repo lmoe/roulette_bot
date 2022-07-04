@@ -1,18 +1,20 @@
-import config from "../config";
-import ProofOfWork from "./wasp_client/proof_of_work";
+import config from '../config';
+import ProofOfWork from './wasp_client/proof_of_work';
 import {
   BasicClient,
   Colors,
   IKeyPair,
   Seed,
   WalletService,
-} from "./wasp_client";
-import type { FairRouletteService } from "./fairroulette_client";
+} from './wasp_client';
+import type { FairRouletteService } from './fairroulette_client';
 
 export default class Player {
   private readonly walletService: WalletService;
   private readonly client: BasicClient;
   private readonly fairRouletteService: FairRouletteService;
+
+  public id: number;
 
   private seed: Buffer;
   private addressIndex: number = 0;
@@ -21,10 +23,12 @@ export default class Player {
   private funds: BigInt;
 
   constructor(
+    id: number,
     basicClient: BasicClient,
     walletService: WalletService,
     fairRouletteService: FairRouletteService
   ) {
+    this.id = id;
     this.seed = Seed.generate();
     this.walletService = walletService;
     this.client = basicClient;
@@ -72,12 +76,12 @@ export default class Player {
   async placeBet() {
     await this.pollFunds();
 
-    if (this.funds < 200n) {
+    if (this.funds < 45000n) {
       this.newAddress();
       await this.sendFaucetRequest();
     }
 
-    const amount = BigInt(Math.round(Math.random() * Number(this.funds)));
+    const amount = BigInt(Math.round(Math.random() * Number(200)));
     const betNumber = 1 + Math.round(Math.random() * 7);
 
     console.log(

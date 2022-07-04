@@ -69,10 +69,28 @@ export class WalletService {
 
     const wallet = new BasicWallet(this.client);
 
-    const unspents = await wallet.getUnspentOutputs(address);
-    const consumedOutputs = wallet.determineOutputsToConsume(unspents, transfer);
+    let unspents;
+    try { unspents = await wallet.getUnspentOutputs(address) } catch (ex) {
+      throw ex
+    }
+
+    let consumedOutputs; try { consumedOutputs = wallet.determineOutputsToConsume(unspents, transfer); }
+    catch (ex) {
+      console.log(ex);
+      console.log(unspents)
+
+      throw ex;
+    }
     const { inputs, consumedFunds } = wallet.buildInputs(consumedOutputs);
-    const outputs = wallet.buildOutputs(address, chainId, transfer, consumedFunds);
+
+    let outputs;
+    try {
+      outputs = wallet.buildOutputs(address, chainId, transfer, consumedFunds);
+    } catch (ex) {
+      console.log(ex);
+      console.log(consumedOutputs, consumedFunds, inputs)
+      throw ex;
+    }
 
     const tx: ITransaction = {
       version: 0,

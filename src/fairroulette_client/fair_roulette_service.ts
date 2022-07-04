@@ -160,6 +160,10 @@ export class FairRouletteService {
     );
   }
 
+  private sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
   public async placeBetOnLedger(
     keyPair: IKeyPair,
     address: string,
@@ -177,13 +181,27 @@ export class FairRouletteService {
       ],
     };
 
-    await this.walletService.sendOnLedgerRequest(
-      keyPair,
-      address,
-      this.chainId,
-      betRequest,
-      take
-    );
+    try {
+      await this.walletService.sendOnLedgerRequest(
+        keyPair,
+        address,
+        this.chainId,
+        betRequest,
+        take
+      );
+    } catch {
+      // Try again later one time
+      console.log("sending transaction failed, trying again for one more time.")
+      await this.sleep(1000);
+      await await this.walletService.sendOnLedgerRequest(
+        keyPair,
+        address,
+        this.chainId,
+        betRequest,
+        take
+      );
+    }
+
   }
 
   public async callView(
