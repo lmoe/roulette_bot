@@ -25,7 +25,7 @@ export default class Player {
 
   constructor(
     id: number,
-    proofOfWorkDifficulty: number
+    proofOfWorkDifficulty: number,
     basicClient: BasicClient,
     walletService: WalletService,
     fairRouletteService: FairRouletteService
